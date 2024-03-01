@@ -36,7 +36,7 @@ class Ball{
         this->radius = radius;
     }
     void Draw(){
-        DrawCircle(x, y, radius, YELLOW);
+        DrawCircle(x, y, radius, BLACK);
     }
     void Update(){
         x += speed_x;
@@ -126,7 +126,7 @@ int main () {
     int play_w = screen_width - overflow;
 
     Paddle player = Paddle( play_w/2 - 120/2, screen_height - 35, 120, 25, 7);
-    CpuPaddle cpu = CpuPaddle( play_w/2 - 120/2, 35 , 120, 25, 7);
+    CpuPaddle cpu = CpuPaddle( play_w/2 - 120/2, 10 , 120, 25, 7);
     Ball ball = Ball(screen_width/2 - overflow/2, screen_height/2, 4, 4, 15);
 
     // player.width = 25;
@@ -157,7 +157,7 @@ int main () {
         }
 
         // Clear the background every loop
-        ClearBackground(BLACK);
+        ClearBackground(GRAY);
         DrawLine(screen_width - overflow, 0 , screen_width - overflow, screen_height, WHITE);
         ball.Draw();
 
