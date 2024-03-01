@@ -2,6 +2,9 @@
 #include <raylib.h>
 
 using namespace std;
+int player_score = 0;
+int cpu_score = 0;
+
 class Ball{
     private:
     float x, y;
@@ -11,6 +14,18 @@ class Ball{
 
     float getY(){
         return y;
+    }
+    float getX(){
+        return x;
+    }
+    int getRadius(){
+        return radius;
+    }
+    void changeSpeedX(){
+        speed_x *= -1;
+    }
+    void changeSpeedY(){
+        speed_y *= -1;
     }
     Ball(float x1 , float y1, int speed_x1, int speed_y1, int radius1){
         x = x1;
@@ -26,10 +41,13 @@ class Ball{
         x += speed_x;
         y += speed_y;
         if(y+radius >= GetScreenHeight() || y - radius <= 0){
-            speed_y *= -1;
+            changeSpeedY();
         }
-        if(x+radius >= GetScreenWidth() || x -radius <= 0){
-            speed_x *= -1;
+        if(x+radius >= GetScreenWidth()){
+            cpu_score++;
+        } 
+        if( x -radius <= 0){
+            player_score++;
         }
 
     }
@@ -107,6 +125,13 @@ int main () {
         ball.Update();
         player.Update();
         cpu.Update(ball.getY());
+
+        if(CheckCollisionCircleRec(Vector2{ball.getX(), ball.getY()}, ball.getRadius(), Rectangle{player.x, player.y, player.width, player.height})){
+            ball.changeSpeedX();
+        }
+        if(CheckCollisionCircleRec(Vector2{ball.getX(), ball.getY()}, ball.getRadius(), Rectangle{cpu.x, cpu.y, cpu.width, cpu.height})){
+            ball.changeSpeedX();
+        }
 
         // Clear the background every loop
         ClearBackground(BLACK);
