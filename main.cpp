@@ -121,13 +121,13 @@ class CpuPaddle : public Paddle{
 int main () {
     cout << "Starting the game" << endl;
     const int screen_width = 700, screen_height = 800;
-    InitWindow(screen_width, screen_height, "Pong Game!");
+    InitWindow(screen_width, screen_height, "Pong");
     SetTargetFPS(60);
     int play_w = screen_width - overflow;
 
-    Paddle player = Paddle( play_w/2 - 120/2, screen_height - 35, 120, 25, 7);
+    Paddle player = Paddle( play_w/2 - 120/2, screen_height - 35, 120, 25, 12);
     CpuPaddle cpu = CpuPaddle( play_w/2 - 120/2, 10 , 120, 25, 7);
-    Ball ball = Ball(screen_width/2 - overflow/2, screen_height/2, 4, 4, 15);
+    Ball ball = Ball(screen_width/2 - overflow/2, screen_height/2, 7, 7, 10);
 
     // player.width = 25;
     // player.height = 120;
@@ -158,7 +158,7 @@ int main () {
 
         // Clear the background every loop
         ClearBackground(GRAY);
-        DrawLine(screen_width - overflow, 0 , screen_width - overflow, screen_height, WHITE);
+        DrawRectangle(screen_width - overflow, 0, 10, GetScreenHeight(), WHITE);
         ball.Draw();
 
         cpu.Draw();
