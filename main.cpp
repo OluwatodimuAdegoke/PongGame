@@ -6,38 +6,44 @@ int player_score = 0;
 int cpu_score = 0;
 const int overflow = 150;
 Color Green = Color{38, 185, 154, 255};
+
+
 class Ball{
     private:
     float x, y;
-    int speed_x, speed_y;
+    float speed_x, speed_y;
     int radius;
     public:
-
     float getY(){
         return y;
     }
     float getX(){
         return x;
     }
+    float getSpeedY(){
+        return speed_y;
+    }
     int getRadius(){
         return radius;
     }
     void changeSpeedX(){
-        speed_x *= -1;
+        speed_x *= -1.00001;
     }
     void changeSpeedY(){
-        speed_y *= -1;
+        speed_y *= -1.00001;
     }
-    Ball(float x , float y, int speed_x, int speed_y, int radius){
+    Ball(float x , float y, float speed_x, float speed_y, int radius){
         this->x = x;
         this->y = y;
         this->speed_x = speed_x;
         this->speed_y = speed_y;
         this->radius = radius;
     }
+
     void Draw(){
         DrawCircle(x, y, radius, BLACK);
     }
+
     void Update(){
         x += speed_x;
         y += speed_y;
@@ -78,9 +84,9 @@ class Paddle{
     public:
     float x,y;
     float width, height;
-    int speed;
+    float speed;
 
-    Paddle(float x, float y, float width, float height, int speed){
+    Paddle(float x, float y, float width, float height, float speed){
         this->x = x;
         this->y = y;
         this->width = width;
@@ -125,23 +131,20 @@ int main () {
     SetTargetFPS(60);
     int play_w = screen_width - overflow;
 
-    Paddle player = Paddle( play_w/2 - 120/2, screen_height - 35, 120, 25, 12);
-    CpuPaddle cpu = CpuPaddle( play_w/2 - 120/2, 10 , 120, 25, 7);
-    Ball ball = Ball(screen_width/2 - overflow/2, screen_height/2, 7, 7, 10);
+    Paddle player = Paddle( play_w/2 - 120/2, screen_height - 35, 120, 20, 12);
+    CpuPaddle cpu = CpuPaddle( play_w/2 - 120/2, 10 , 120, 20, 7);
+    Ball ball = Ball(screen_width/2 - overflow/2, screen_height/2, 4, 4, 6);
 
-    // player.width = 25;
-    // player.height = 120;
-    // player.x = screen_width - player.width - 10;
-    // player.y = screen_height/2 - player.height/2;
-    // player.speed = 6;
-    // cpu.width = 25;
-    // cpu.height = 120;
-    // cpu.x = 10;
-    // cpu.y = screen_height/2 - player.height/2;
-    // cpu.speed = 6;
-
+    const char* winnerText = nullptr;
 
     while(!WindowShouldClose()){
+        // if(cpu_score >= 10){
+        //     winnerText = "CPU Wins!";
+        // }else if(player_score >= 10){
+        //     winnerText = "You win!";
+        // }
+
+
         BeginDrawing();
         
         //Update the ball's position before drawing
@@ -150,10 +153,15 @@ int main () {
         cpu.Update(ball.getX());
 
         if(CheckCollisionCircleRec(Vector2{ball.getX(), ball.getY()}, ball.getRadius(), Rectangle{player.x, player.y, player.width, player.height})){
-            ball.changeSpeedY();
+            if(ball.getSpeedY() > 0){
+                ball.changeSpeedY();   
+            }
+             
         }
         if(CheckCollisionCircleRec(Vector2{ball.getX(), ball.getY()}, ball.getRadius(), Rectangle{cpu.x, cpu.y, cpu.width, cpu.height})){
-            ball.changeSpeedY();
+            if(ball.getSpeedY() < 0){
+                ball.changeSpeedY();   
+            }
         }
 
         // Clear the background every loop
@@ -166,7 +174,9 @@ int main () {
 
         DrawText(TextFormat("%i",cpu_score), screen_width - 90, 200, 80, WHITE);
         DrawText(TextFormat("%i",player_score),screen_width - 90, screen_height - 300, 80, WHITE);
-
+        // if(winnerText){
+        //     DrawText(winnerText, GetScreenWidth()/2 - overflow, GetScreenHeight()/2 , 60, RED);
+        // }
         EndDrawing();
     }
 
